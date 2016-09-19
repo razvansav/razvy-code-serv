@@ -4,7 +4,7 @@ client.login('your token');
 
 var request = require('request');
 var mcCommand = '/minecraft'; // Command for triggering
-var mcIP = 123.123.123.123; // Your MC server IP
+var mcIP = '123.123.123.123'; // Your MC server IP
 var mcPort = 1234; // Your MC server port
 
 client.on('message', message => {
