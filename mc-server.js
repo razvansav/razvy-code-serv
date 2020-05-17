@@ -52,3 +52,4 @@ client.on('message', message => {
         message.reply(config.commands.ip.messages.main);
     }
 });
+// Credit to The MG#8238 on Discord for improvements to this script
