@@ -28,7 +28,7 @@ const config = {
     }
 };
 
-// IMPORTANT: You need to run "npm install request" (without quotes) in your terminal before executing this script
+// IMPORTANT: You need to run "npm install request discord.js" (without quotes) in your terminal before executing this script
 
 client.on('message', message => {
     if (message.content === config.commands.status.command) {
@@ -43,7 +43,7 @@ client.on('message', message => {
             if (body.online) {
                 status = config.commands.status.messages.online;
                 body.players.now ? status += config.commands.status.messages.players : status += config.commands.status.messages.noPlayers;
-                status.replace("{online}", body.players.now);
+                status = status.replace("{online}", body.players.now);
             }
             message.reply(status);
         });
