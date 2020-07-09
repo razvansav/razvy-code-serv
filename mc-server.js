@@ -53,6 +53,7 @@ function statusCommand(message) { // Handle status command
         .then(body => {
             data = body;
             lastUpdated = body.last_updated * 1000 || Date.now();
+            lastUpdated = Math.min(lastUpdate, Date.now()); // Last updated time can't be in the future
             lastUpdated = Math.max(lastUpdated, Date.now() - cacheTime + 60000); // Wait at least 1 minute
             replyStatus(message, data)
         })
