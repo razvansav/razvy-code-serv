@@ -1,9 +1,9 @@
-const fetch = require('node-fetch');
+const ping = require('minecraft-server-util');
 const Discord = require('discord.js');
 const client = new Discord.Client();
-client.login('Your Token Here');
+client.login('your_token_here');
 
-// IMPORTANT: You need to run "npm i node-fetch discord.js" (without quotes) in your terminal before executing this script
+// IMPORTANT: You need to run "npm i minecraft-server-util discord.js" (without quotes) in your terminal before executing this script
 
 const server = {
     ip: '0.0.0.0', // Put your minecraft server IP or hostname here (e.g. '192.168.0.1')
@@ -14,7 +14,6 @@ const commands = {
         command: '.status',
         text: {
             error: 'Error getting Minecraft server status...', // Check your terminal when you see this
-            offline: '*Minecraft server is currently offline*',
             online: '**Minecraft** server is **online**  -  ',
             players: '**{online}** people are playing!', // {online} will show player count
             noPlayers: '**Nobody is playing**'
@@ -31,8 +30,7 @@ const commands = {
 
 // Do not edit below this line unless you know what you're doing
 
-const url = 'https://mcapi.us/server/status?ip=' + server.ip + '&port=' + server.port;
-const cacheTime = 5 * 60 * 1000; // 5 minute API cache time
+const cacheTime = 30 * 1000; // 30 sec cache time
 let data, lastUpdated = 0;
 
 client.on('message', message => { // Listen for messages and trigger commands
@@ -45,20 +43,14 @@ client.on('message', message => { // Listen for messages and trigger commands
 
 function statusCommand(message) { // Handle status command
     if(Date.now() > lastUpdated + cacheTime) { // Cache expired or doesn't exist
-        fetchStatus()
-        .then(body => {
-            if(body.status === 'success') return body;
-            else throw body.error || 'unknown API error';
-        })
-        .then(body => {
-            data = body;
-            lastUpdated = body.last_updated * 1000 || Date.now();
-            lastUpdated = Math.min(lastUpdated, Date.now()); // Last updated time can't be in the future
-            lastUpdated = Math.max(lastUpdated, Date.now() - cacheTime + 60000); // Wait at least 1 minute
-            replyStatus(message, data)
+        ping(server.ip, server.port)
+        .then(res => {
+            data = res;
+            lastUpdated = Date.now();
+            replyStatus(message)
         })
         .catch(err => {
-            console.error('Error:', err);
+            console.error(err);
             return message.reply(commands.status.text.error);
         });
     } else { // Use cached data
@@ -68,22 +60,10 @@ function statusCommand(message) { // Handle status command
 
 function replyStatus(message) {
     let { text } = commands.status;
-    let status = text.offline;
-    if(data.online) {
-        status = text.online;
-        status += data.players.now ? text.players : text.noPlayers;
-        status = status.replace('{online}', data.players.now);
-    }
+    let status = text.online;
+    status += data.onlinePlayers ? text.players : text.noPlayers;
+    status = status.replace('{online}', data.onlinePlayers);
     message.reply(status);
-}
-
-function fetchStatus() {
-    return fetch(url)
-        .then(res => {
-            if(res.ok) return res;
-            else throw res.statusText;
-        })
-        .then(res => res.json())
 }
 
 function ipCommand(message) { // Handle IP command
