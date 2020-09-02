@@ -43,7 +43,7 @@ client.on('message', message => { // Listen for messages and trigger commands
 
 function statusCommand(message) { // Handle status command
     if(Date.now() > lastUpdated + cacheTime) { // Cache expired or doesn't exist
-        ping(server.ip, server.port)
+        ping(server.ip, { port: server.port })
         .then(res => {
             data = res;
             lastUpdated = Date.now();
