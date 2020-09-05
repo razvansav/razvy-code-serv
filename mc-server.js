@@ -1,4 +1,4 @@
-const ping = require('minecraft-server-util');
+const util = require('minecraft-server-util');
 const Discord = require('discord.js');
 const client = new Discord.Client();
 client.login('your_token_here');
@@ -43,7 +43,7 @@ client.on('message', message => { // Listen for messages and trigger commands
 
 function statusCommand(message) { // Handle status command
     if(Date.now() > lastUpdated + cacheTime) { // Cache expired or doesn't exist
-        ping(server.ip, { port: server.port })
+        util.ping(server.ip, { port: server.port })
         .then(res => {
             data = res;
             lastUpdated = Date.now();
