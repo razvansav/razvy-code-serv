@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 client.login('your_token_here');
 
-// IMPORTANT: You need to run "npm i minecraft-server-util discord.js" (without quotes) in your terminal before executing this script
+// IMPORTANT: You need to run "npm i minecraft-server-util@^3.0.0 discord.js@^12.3.1" (without quotes) in your terminal before executing this script
 
 const server = {
     ip: '0.0.0.0', // Put your minecraft server IP or hostname here (e.g. '192.168.0.1')
@@ -43,7 +43,7 @@ client.on('message', message => { // Listen for messages and trigger commands
 
 function statusCommand(message) { // Handle status command
     if(Date.now() > lastUpdated + cacheTime) { // Cache expired or doesn't exist
-        util.ping(server.ip, { port: server.port })
+        util.status(server.ip, { port: server.port })
         .then(res => {
             data = res;
             lastUpdated = Date.now();
