@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 client.login('your_token_here');
 
-// IMPORTANT: You need to run "npm i minecraft-server-util@^3.0.0 discord.js@^12.3.1" (without quotes) in your terminal before executing this script
+// IMPORTANT: You need to run "npm i minecraft-server-util@^3.0.1 discord.js@^12.3.1" (without quotes) in your terminal before executing this script
 
 const server = {
     ip: '0.0.0.0', // Put your minecraft server IP or hostname here (e.g. '192.168.0.1')
